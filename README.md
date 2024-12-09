@@ -1,20 +1,18 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 自由研究課テーマ提案アプリ
 
-## Getting Started
+## 環境
 
-First, run the development server:
+- node v22.X
+- npm v10.X
 
-```bash
+## 起動
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+http://localhost:3000
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## このアプリを作ろうと思った理由
+
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
