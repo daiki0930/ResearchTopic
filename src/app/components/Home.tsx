@@ -18,12 +18,12 @@ export default function RootPageClient() {
           <div className="flex justify-center mt-10">
               <button
                 className="bg-teal-500 hover:bg-teal-600 text-white w-[300px] h-16 text-2xl rounded-full border-none cursor-pointer mr-4"
-                onClick={() => router.push('/Signup')}
+                onClick={() => router.push('Authentication/Signup')}
               >新規登録の方はこちら
               </button>
               <button
                 className="bg-teal-500 hover:bg-teal-600 text-white w-[300px] h-16 text-2xl rounded-full border-none cursor-pointer"
-                onClick={() => router.push('/Login')}
+                onClick={() => router.push('Authentication/Login')}
               >ログインの方はこちら
               </button>
           </div>
