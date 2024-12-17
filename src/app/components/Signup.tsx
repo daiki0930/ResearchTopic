@@ -9,7 +9,7 @@ import {
   UserCredential,
   User,
 } from "firebase/auth";
-// import { useShowToast } from '../../../hooks/useShowToast';
+import { useShowToast } from "@/hooks/useShowToast";
 
 export default function SignUpForm() {
   const [email, setEmail] = useState("");
@@ -18,7 +18,7 @@ export default function SignUpForm() {
   // const [error, setError] = useState('');
   const router = useRouter();
   const auth = getAuth();
-  // const showToast = useShowToast();
+  const showToast = useShowToast();
 
   const handleRegister = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -29,17 +29,19 @@ export default function SignUpForm() {
         password
       );
       setUser(registerUser.user);
-      // showToast({
-      //     status: 'success',
-      //     title: 'ユーザー登録が完了しました。',
-      // });
+      showToast({
+          status: 'success',
+          title: 'ユーザー登録が完了しました。',
+          description: ''
+      });
       router.push("/Research/FirebaseLogin");
     } catch (error) {
       // setError(error);
-      // showToast({
-      //     status: 'error',
-      //     title: '既にユーザー登録をしています。',
-      // });
+      showToast({
+          status: 'error',
+          title: '既にユーザー登録をしています。',
+          description: ''
+      });
     }
   };
 
@@ -64,7 +66,7 @@ export default function SignUpForm() {
         <button
           onClick={handleRegister}
           type="submit"
-          className="bg-teal-500 text-white w-1/2 p-2 rounded-md border-none cursor-pointer mb-2 transition-colors"
+          className="bg-teal-500 hover:bg-[#b31d40] active:bg-[#ba832b] text-white w-1/2 p-2 rounded-md cursor-pointer mb-2"
         >
           新規登録
         </button>

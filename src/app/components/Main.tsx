@@ -1,12 +1,12 @@
+'use client'
 
-import { React, useState, useEffect } from 'react';
-import { useShowToast } from '../../../../hooks/useShowToast';
+import React, {useState, useEffect } from 'react';
+import { useShowToast } from '@/hooks/useShowToast';
 import { useRouter } from 'next/navigation';
 
-import '../../api/firebase/firebaseConfig';
-import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
+import '../Authentication/Login/firebase/firebase';
+import { getAuth, signOut, onAuthStateChanged, User } from 'firebase/auth';
 
-import styles from '../../../styles/Login.module.css';
 // import Description from '../../../components/description';
 
 // import { destroyCookie, setCookie } from 'nookies';
@@ -40,34 +40,38 @@ import styles from '../../../styles/Login.module.css';
 //     }
 // }
 
-export default function Home() {
-    const [user, setUser] = useState(null);
+export default function Main() {
+    const [user, setUser] = useState<User | null>(null);
     const showToast = useShowToast();
     const router = useRouter();
     const auth = getAuth()
-    const [interests, setInterests] = useState();
-    const [interests1, setInterests1] = useState();
-    const [interests2, setInterests2] = useState();
-    const [interests3, setInterests3] = useState();
-    const [interests4, setInterests4] = useState();
+    const [interests, setInterests] = useState<string>('');
+    const [interests1, setInterests1] = useState<string>('');
+    const [interests2, setInterests2] = useState<string>('');
+    const [interests3, setInterests3] = useState<string>('');
+    const [interests4, setInterests4] = useState<string>('');
     const [theme, setTheme] = useState();
     const [content, setContent] = useState();
 
     const fetchTheme = async () => {
+        console.log('-------どこまで届いているか------')
         const requestBody = {
             interests,
             ...(interests === '理科' ? {interests1} : {interests3} ),
             ...(interests === '理科' ? {interests2} : {}),
             interests4,
         };
-        const response = await fetch('../../api/generate-theme', {
+        console.log('-------どこまで届いているか1------')
+        const response = await fetch('../api', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(requestBody),
         });
+        console.log('-------どこまで届いているか2------')
         const data = await response.json();
+        console.log('-------どこまで届いているか3------')
         setTheme(data.theme);
         setContent(data.content);
     };
@@ -96,13 +100,15 @@ export default function Home() {
             setUser(null);
             showToast({
                 status: 'success',
-                title: 'ログアウトしました。'
+                title: 'ログアウトしました。',
+                description: ''
             })
-            router.push('/Research/FirebaseLogin');
+            router.push('Authentication/Login');
         } catch (error) {
             showToast({
                 status: 'error',
                 title: 'ログアウトに失敗しました。',
+                description: 'エラーが発生しました。'
             })
         }
     }
@@ -119,95 +125,90 @@ export default function Home() {
 
     return (
         <div className='flex justify-center items-center h-[2500px] flex-col bg-gradient-to-b from-[#f5ba61] to-[#eecfb6]'>
-            <div className="absolute top-5 w-3/4 text-center bg-white rounded-lg">
-                <p className="text-6xl font-bold text-[#ea9917]">
+            <div className="absolute top-5 w-3/4 text-center bg-white rounded-[10px]">
+                <p className="text-[60px] font-bold text-[#ea9917]">
                     AIと一緒に自由研究テーマを決めよう!
                 </p>
             </div>
-            <Box position="absolute" top="20px" right="30px">
-            <Button onClick={handleLogout} className={styles.button_LogOut}> ログアウト </Button>
-            </Box>
+            <div className="absolute top-5 right-[30px]">
+            <button onClick={handleLogout} className='bg-[#f4f0b4] px-5 py-2.5 border-none rounded-md'> ログアウト </button>
+            </div>
 
-            <Box position="absolute" bottom="100px" width="100%" textAlign="center" backgroundColor="#f3960b">
-                <Text fontSize="30px" color="black">
+            <div className="absolute bottom-[100px] w-full text-center bg-[#f3960b]">
+                <p className="text-2xl text-black">
                     いくつかの質問に答えてね！
-                </Text>
-            </Box>
+                </p>
+            </div>
 
-            <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" fontSize="25px" height="100vh">
-                <Text marginTop="500px">
+            <div className="flex flex-col justify-center items-center text-[25px] h-screen">
+                <p className="mt-[500px]">
                     小学校の授業で好きな科目は？(１科目のみ)
-                </Text>
-                <Input
-                    width="300px"
-                    type="text"
+                </p>
+                <input
                     value={interests}
                     onChange={(e) => setInterests(e.target.value)}
                     placeholder="例: 理科、社会"
-                    className={styles.question_input1}
+                    className="w-[300px] p-[10px] mt-[5px] mb-[80px] text-[20px] border-t-2 border-b-2 border-[#f56f27] outline-none placeholder-opacity-60 placeholder:text-center"
                 />
 
-                <Text>
+                <p>
                     理科の授業で面白かった実験は？(理科と答えた場合のみ)
-                </Text>
-                <Input
-                    width="710px"
-                    type="text"
+                </p>
+                <input
                     value={interests1}
                     onChange={(e) => setInterests1(e.target.value)}
                     disabled={['国語', '数学', '社会'].includes(interests)}
                     placeholder={ ['国語', '数学', '社会'].includes(interests) ? '※入力できません' : '例: 水の性質、燃焼、光の反射と屈折、バネと力、昆虫の観察、天気の観察' }
-                    className={styles.question_input1}
+                    className="w-[710px] p-[9px] mt-[5px] mb-[80px] text-[20px] border-t-2 border-b-2 border-[#f56f27] outline-none placeholder-opacity-60 placeholder:text-center"
                 />
                 
-                <Text>
+                <p>
                     家にあるもので何か使ってみたいものはある？(理科と答えた場合のみ)
-                </Text>
-                <Input
-                    width="660px"
-                    type="text"
+                </p>
+                <input
                     value={interests2}
                     onChange={(e) => setInterests2(e.target.value)}
                     disabled={['国語', '数学', '社会'].includes(interests)}
                     placeholder={ ['国語', '数学', '社会'].includes(interests) ? '※入力できません' : "例: 水、酢、砂糖、電池、ペットボトル、磁石、アルミホイル、空き瓶" }
-                    className={styles.question_input1}
+                    className="w-[660px] p-[9px] mt-[5px] mb-[80px] text-[20px] border-t-2 border-b-2 border-[#f56f27] outline-none placeholder-opacity-60 placeholder:text-center"
                 />
 
-                <Text>
+                <p>
                     好きな科目のことで、どんなことが気になる？(理科以外で答えた場合のみ)
-                </Text>
-                <Input
-                    width="870px"
-                    type="text"
+                </p>
+                <input
                     value={interests3}
                     onChange={(e) => setInterests3(e.target.value)}
                     disabled={interests === '理科'}
                     placeholder={ interests === '理科' ? '※入力できません' : "例: 漢字や詩に関すること(国語)、図形やデータのこと(算数)、地理や歴史のこと(社会)"}
-                    className={styles.question_input1}
+                    className="w-[870px] p-[9px] mt-[5px] mb-[80px] text-[20px] border-t-2 border-b-2 border-[#f56f27] outline-none placeholder-opacity-60 placeholder:text-center"
                 />
 
-                <Text>
+                <p>
                     どのくらいの期間で終わらせたい？
-                </Text>
-                <Input
-                    width="200px"
-                    type="text"
+                </p>
+                <input
                     value={interests4}
                     onChange={(e) => setInterests4(e.target.value)}
                     placeholder="例: 一週間、一ヶ月"
-                    className={styles.question_input1}
+                    className="w-[200px] p-[9px] mt-[5px] mb-[80px] text-[20px] border-t-2 border-b-2 border-[#f56f27] outline-none placeholder-opacity-60 placeholder:text-center"
                 />
 
-                <Button onClick={fetchTheme} className={styles.button_Create}> この条件で案を作成してもらう </Button>
+                <button
+                    onClick={fetchTheme}
+                    className="mt-2 py-2 px-5 text-lg bg-[#e8900c] text-black rounded-md border-none cursor-pointer hover:bg-[#ff9900] active:bg-[#ff5e00]"
+                >
+                    自由研究テーマを作成
+                </button>
 
-                <Text marginTop="60px"> 提案テーマ </Text>
+                <p className="mt-15"> 提案テーマ </p>
                 
-                { theme && <Text className={styles.responseText}> {theme} </Text> }
+                { theme && <p className="max-w-[90%] p-[25px] rounded-[15px] mt-8 text-[25px] bg-[#f09050]"> {theme} </p> }
                 
-                { content && <Text className={styles.responseText}> {content} </Text> }
+                { content && <p className="max-w-[90%] p-[25px] rounded-[15px] mt- text-[25px] bg-[#f09050]"> {content} </p> }
 
                 {/* <Button onClicK={handleReset} className={styles.ResetButton}> もう一度行う</Button> */}
-            </Box>
+            </div>
         </div>
     );
 };

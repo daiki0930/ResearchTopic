@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-export default function RootPageClient() {
+export default function Root() {
   const router = useRouter();
 
   return (

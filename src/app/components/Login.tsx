@@ -9,16 +9,16 @@ import {
   UserCredential,
   User,
 } from "firebase/auth";
-// import { useShowToast } from '../../../hooks/useShowToast';
+import { useShowToast } from "@/hooks/useShowToast";
 
-export default function LoginForm() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState<User | null>(null);
   // const [error, setError] = useState('');
   const router = useRouter();
   const auth = getAuth();
-  // const showToast = useShowToast()
+  const showToast = useShowToast()
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -41,19 +41,21 @@ export default function LoginForm() {
       // await auth.signOut();
       // setCookie(null, 'token', token, { maxAge: oneHourInSeconds, path: '/Research/MyPage'});
 
-      // showToast({
-      //     status: 'success',
-      //     title: 'ログインに成功しました。'
-      // })
-      router.push("/Research/MyPage/");
+      showToast({
+          status: 'success',
+          title: 'ログインに成功しました。',
+          description: ''
+      })
+      console.log('------------------')
+      router.push("../Main");
     } catch (error) {
       // setError(error);
       setUser(null);
-      // showToast({
-      //     status: 'error',
-      //     title: 'ログインに失敗しました。',
-      //     description: '入力されたユーザー情報が正しくありません。'
-      // })
+      showToast({
+          status: 'error',
+          title: 'ログインに失敗しました。',
+          description: '入力されたユーザー情報が正しくありません。'
+      })
     }
   };
 
@@ -80,7 +82,7 @@ export default function LoginForm() {
         <button
           onClick={handleLogin}
           type="submit"
-          className="bg-teal-500 text-white w-1/2 p-2 rounded-md border-none cursor-pointer mb-2 transition-colors"
+          className="bg-teal-500 hover:bg-[#b31d40] active:bg-[#ba832b] text-white w-1/2 p-2 rounded-md cursor-pointer mb-2"
         >
           ログイン
         </button>
