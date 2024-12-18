@@ -10,7 +10,7 @@ const openai = new OpenAI({
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        console.log('------届いているか (リクエストボディ)------', body);
+        console.log('------届いているか------', body);
 
         const { interests, interests1, interests2, interests3, interests4 } = body;
 

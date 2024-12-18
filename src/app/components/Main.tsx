@@ -134,14 +134,14 @@ export default function Main() {
             <button onClick={handleLogout} className='bg-[#f4f0b4] px-5 py-2.5 border-none rounded-md'> ログアウト </button>
             </div>
 
-            <div className="absolute bottom-[100px] w-full text-center bg-[#f3960b]">
+            <div className="mb-5 absolute bottom-[110px] w-full text-center bg-[#f3960b]">
                 <p className="text-2xl text-black">
                     いくつかの質問に答えてね！
                 </p>
             </div>
 
             <div className="flex flex-col justify-center items-center text-[25px] h-screen">
-                <p className="mt-[500px]">
+                <p className="mt-[90px]">
                     小学校の授業で好きな科目は？(１科目のみ)
                 </p>
                 <input
@@ -196,18 +196,18 @@ export default function Main() {
 
                 <button
                     onClick={fetchTheme}
-                    className="mt-2 py-2 px-5 text-lg bg-[#e8900c] text-black rounded-md border-none cursor-pointer hover:bg-[#ff9900] active:bg-[#ff5e00]"
+                    className="py-3 px-6 text-lg bg-[#e8900c] text-black rounded-md border-none cursor-pointer hover:bg-[#ff9900] active:bg-[#ff5e00]"
                 >
                     自由研究テーマを作成
                 </button>
 
-                <p className="mt-15"> 提案テーマ </p>
+                <p className="mt-[19px]"> 提案テーマ </p>
                 
-                { theme && <p className="max-w-[90%] p-[25px] rounded-[15px] mt-8 text-[25px] bg-[#f09050]"> {theme} </p> }
+                { theme && <p className="max-w-[90%] p-[25px] rounded-[15px] mb-5 text-[23px] bg-[#f09050]"> {theme} </p> }
                 
-                { content && <p className="max-w-[90%] p-[25px] rounded-[15px] mt- text-[25px] bg-[#f09050]"> {content} </p> }
+                { content && <p className="max-w-[90%] p-[25px] rounded-[15px] text-[23px] bg-[#f09050]"> {content} </p> }
 
-                {/* <Button onClicK={handleReset} className={styles.ResetButton}> もう一度行う</Button> */}
+                {/* <button onClicK={handleReset} className={styles.ResetButton}> もう一度行う</button> */}
             </div>
         </div>
     );
