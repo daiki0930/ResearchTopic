@@ -46,8 +46,7 @@ export default function Login() {
           title: 'ログインに成功しました。',
           description: ''
       })
-      console.log('------------------')
-      router.push("../Main");
+      router.push("/Main");
     } catch (error) {
       // setError(error);
       setUser(null);
@@ -60,7 +59,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-[#47d5e2] to-[#c1f8ea]">
+    <div className="flex justify-center items-center h-[900px] bg-gradient-to-b from-[#47d5e2] to-[#c1f8ea]">
       <div className="bg-white p-5 rounded-lg shadow-md max-w-xl w-full text-center">
         <h1>ログイン</h1>
         <input

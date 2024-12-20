@@ -34,7 +34,7 @@ export default function SignUpForm() {
           title: 'ユーザー登録が完了しました。',
           description: ''
       });
-      router.push("/Research/FirebaseLogin");
+      router.push("/Main");
     } catch (error) {
       // setError(error);
       showToast({
@@ -46,7 +46,7 @@ export default function SignUpForm() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-[#47d5e2] to-[#c1f8ea]">
+    <div className="flex justify-center items-center h-[900px] bg-gradient-to-b from-[#47d5e2] to-[#c1f8ea]">
       <div className="bg-white p-5 rounded-lg shadow-md max-w-xl w-full text-center">
         <h1>新規登録</h1>
         <input

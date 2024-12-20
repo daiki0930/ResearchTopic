@@ -6,7 +6,7 @@ export default function Root() {
   const router = useRouter();
 
   return (
-      <div className="flex justify-center items-center h-screen bg-gradient-to-b from-[#47d5e2] to-[#c1f8ea] relative">
+      <div className="flex justify-center items-center h-[900px] bg-gradient-to-b from-[#47d5e2] to-[#c1f8ea] relative">
         <div className="bg-white absolute top-5 w-full text-center ">
           <h1 className="text-4xl font-bold text-red-500 mb-3 mt-4">
             自由研究課題提案アプリです。

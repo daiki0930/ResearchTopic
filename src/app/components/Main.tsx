@@ -103,7 +103,7 @@ export default function Main() {
                 title: 'ログアウトしました。',
                 description: ''
             })
-            router.push('Authentication/Login');
+            router.push('/');
         } catch (error) {
             showToast({
                 status: 'error',
@@ -124,7 +124,7 @@ export default function Main() {
     // };
 
     return (
-        <div className='flex justify-center items-center h-[2500px] flex-col bg-gradient-to-b from-[#f5ba61] to-[#eecfb6]'>
+        <div className='flex justify-center items-center h-[2300px] flex-col bg-gradient-to-b from-[#f5ba61] to-[#eecfb6]'>
             <div className="absolute top-5 w-3/4 text-center bg-white rounded-[10px]">
                 <p className="text-[60px] font-bold text-[#ea9917]">
                     AIと一緒に自由研究テーマを決めよう!
