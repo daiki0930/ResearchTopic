@@ -1,11 +1,12 @@
 'use client'
 
 import React, {useState, useEffect } from 'react';
-import { useShowToast } from '@/hooks/useShowToast';
 import { useRouter } from 'next/navigation';
 
 import '../Authentication/Login/firebase/firebase';
 import { getAuth, signOut, onAuthStateChanged, User } from 'firebase/auth';
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css"
 
 // import Description from '../../../components/description';
 
@@ -42,7 +43,6 @@ import { getAuth, signOut, onAuthStateChanged, User } from 'firebase/auth';
 
 export default function Main() {
     const [user, setUser] = useState<User | null>(null);
-    const showToast = useShowToast();
     const router = useRouter();
     const auth = getAuth()
     const [interests, setInterests] = useState<string>('');
@@ -92,24 +92,25 @@ export default function Main() {
 
     const handleLogout = async() => {
         try {
-            // console.log('----どこでトークン削除が行われるか----',document.cookie)
             await signOut(auth);
-            // console.log('----ログアウト0----',auth)
-            // destroyCookie(null, 'token', { path: '/Research/MyPage'});
-            // console.log('----トークン削除されてるはず----',document.cookie)
+
             setUser(null);
-            showToast({
-                status: 'success',
-                title: 'ログアウトしました。',
-                description: ''
-            })
+            toast.success("ログアウトに成功しました。", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+              })
             router.push('/');
         } catch (error) {
-            showToast({
-                status: 'error',
-                title: 'ログアウトに失敗しました。',
-                description: 'エラーが発生しました。'
-            })
+            toast.error("ログアウトに失敗しました。", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+              })
         }
     }
 

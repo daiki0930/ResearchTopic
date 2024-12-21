@@ -9,16 +9,15 @@ import {
   UserCredential,
   User,
 } from "firebase/auth";
-import { useShowToast } from "@/hooks/useShowToast";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
 
 export default function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState<User | null>(null);
-  // const [error, setError] = useState('');
   const router = useRouter();
   const auth = getAuth();
-  const showToast = useShowToast();
 
   const handleRegister = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -29,19 +28,22 @@ export default function SignUpForm() {
         password
       );
       setUser(registerUser.user);
-      showToast({
-          status: 'success',
-          title: 'ユーザー登録が完了しました。',
-          description: ''
-      });
+      toast.success("会員登録に成功しました。", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+      })
       router.push("/Main");
     } catch (error) {
-      // setError(error);
-      showToast({
-          status: 'error',
-          title: '既にユーザー登録をしています。',
-          description: ''
-      });
+      toast.error("会員登録に失敗しました。", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+      })
     }
   };
 

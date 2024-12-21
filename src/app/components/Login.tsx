@@ -9,16 +9,16 @@ import {
   UserCredential,
   User,
 } from "firebase/auth";
-import { useShowToast } from "@/hooks/useShowToast";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState<User | null>(null);
-  // const [error, setError] = useState('');
   const router = useRouter();
   const auth = getAuth();
-  const showToast = useShowToast()
+
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -29,7 +29,16 @@ export default function Login() {
         password
       );
       setUser(loginUser.user);
-      const token = await loginUser.user.getIdToken();
+      console.log('--------届いているか-------',loginUser.user)
+
+      toast.success("ログインに成功しました。", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+      })
+      // const token = await loginUser.user.getIdToken();
 
       // await fetch('api/auth/sessionLogin', {
       //     method: 'POST',
@@ -41,19 +50,16 @@ export default function Login() {
       // await auth.signOut();
       // setCookie(null, 'token', token, { maxAge: oneHourInSeconds, path: '/Research/MyPage'});
 
-      showToast({
-          status: 'success',
-          title: 'ログインに成功しました。',
-          description: ''
-      })
+      console.log('--------届いているか1-------',loginUser.user)
       router.push("/Main");
     } catch (error) {
-      // setError(error);
       setUser(null);
-      showToast({
-          status: 'error',
-          title: 'ログインに失敗しました。',
-          description: '入力されたユーザー情報が正しくありません。'
+      toast.error("ログインに失敗しました。", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
       })
     }
   };
@@ -82,6 +88,7 @@ export default function Login() {
           onClick={handleLogin}
           type="submit"
           className="bg-teal-500 hover:bg-[#b31d40] active:bg-[#ba832b] text-white w-1/2 p-2 rounded-md cursor-pointer mb-2"
+        
         >
           ログイン
         </button>

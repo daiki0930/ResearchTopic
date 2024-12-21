@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Footer from "./components/general/Footer";
+import ToastProvider from "@/hooks/useToast";
 
 export const metadata: Metadata = {
   title: "GPT Theme",
@@ -15,9 +16,9 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <div>
-        {children}
-        </div>
+        <ToastProvider>       
+          {children}
+        </ToastProvider>
         <Footer />
       </body>
     </html>
