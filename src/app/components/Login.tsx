@@ -9,19 +9,49 @@ import {
   UserCredential,
   User,
 } from "firebase/auth";
-import { toast } from "react-toastify";
+import { showToast } from "@/utils/toast";
 import "react-toastify/dist/ReactToastify.css"
+
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState<User | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const auth = getAuth();
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = (password: string): boolean => {
+    return password.length >= 8;
+  }
 
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    if (!email) {
+      showToast("error", "メールアドレスを入力してください。");
+      return;
+    }
+    if (!validateEmail(email)) {
+      showToast("error", "有効なメールアドレスを入力してください。");
+      return;
+    }
+    if (!password) {
+      showToast("error", "パスワードを入力してください。");
+      return;
+    }
+    if (!validatePassword(password)) {
+      showToast("error", "パスワードは8文字以上で入力してください。");
+      return;
+    }
+
     try {
       const loginUser: UserCredential = await signInWithEmailAndPassword(
         auth,
@@ -29,38 +59,11 @@ export default function Login() {
         password
       );
       setUser(loginUser.user);
-      console.log('--------届いているか-------',loginUser.user)
-
-      toast.success("ログインに成功しました。", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-      })
-      // const token = await loginUser.user.getIdToken();
-
-      // await fetch('api/auth/sessionLogin', {
-      //     method: 'POST',
-      //     headers: {
-      //         'Content-Type': 'application/json'
-      //     },
-      //     body: JSON.stringify({ token })
-      // });
-      // await auth.signOut();
-      // setCookie(null, 'token', token, { maxAge: oneHourInSeconds, path: '/Research/MyPage'});
-
-      console.log('--------届いているか1-------',loginUser.user)
+      showToast("success", "ログインに成功しました。");
       router.push("/Main");
     } catch (error) {
       setUser(null);
-      toast.error("ログインに失敗しました。", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-      })
+      showToast("error", "ログインに失敗しました。");
     }
   };
 
@@ -76,14 +79,23 @@ export default function Login() {
           required
           className="w-96 p-2 mt-1 mb-7 border-b-2 border-[#2e9287] focus:outline-none focus:border-teal-500"
         />
-        <input
-          type="password"
-          placeholder="パスワード"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="w-96 p-2 mt-1 mb-7 border-b-2 border-[#2e9287] focus:outline-none focus:border-teal-500"
-        />
+        <div className="relative mb-7">
+          <input
+            type={showPassword ? "text" : "password"}
+            id="password"
+            placeholder="パスワード"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-96 p-2 mt-1 border-b-2 border-[#2e9287] focus:outline-none focus:border-teal-500 pr-12"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute top-1/2 right-20 transform -translate-y-1/2 text-teal-500"
+          >
+            {showPassword ? <Visibility /> : <VisibilityOff />}
+          </button>
+        </div>
         <button
           onClick={handleLogin}
           type="submit"

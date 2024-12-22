@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import '../Authentication/Login/firebase/firebase';
 import { getAuth, signOut, onAuthStateChanged, User } from 'firebase/auth';
-import { toast } from 'react-toastify';
+import { showToast } from "@/utils/toast";
 import "react-toastify/dist/ReactToastify.css"
 
 // import Description from '../../../components/description';
@@ -95,22 +95,10 @@ export default function Main() {
             await signOut(auth);
 
             setUser(null);
-            toast.success("ログアウトに成功しました。", {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-              })
+            showToast("success", "ログアウトに成功しました。");
             router.push('/');
         } catch (error) {
-            toast.error("ログアウトに失敗しました。", {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-              })
+            showToast("error", "ログアウトに失敗しました。");
         }
     }
 

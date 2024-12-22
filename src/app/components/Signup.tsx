@@ -9,18 +9,50 @@ import {
   UserCredential,
   User,
 } from "firebase/auth";
-import { toast } from "react-toastify";
+import { showToast } from "@/utils/toast";
 import "react-toastify/dist/ReactToastify.css"
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+
 
 export default function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
   const auth = getAuth();
 
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = (password: string): boolean => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  }
+
   const handleRegister = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    // !をつけてfalseの時にエラーを起こす
+    if (!email) {
+      showToast("error", "メールアドレスを設定してください。");
+      return;
+    }
+    if (!validateEmail(email)) {
+      showToast("error", "有効なメールアドレスを設定してください。");
+      return;
+    }
+    if (!password) {
+      showToast("error", "パスワードを設定してください。");
+      return;
+    }
+    if (!validatePassword(password)) {
+      showToast("error", "パスワードは最低8文字以上で、大文字、小文字、数字、記号を含む必要があります。");
+      return;
+    }
+
     try {
       const registerUser: UserCredential = await createUserWithEmailAndPassword(
         auth,
@@ -28,22 +60,11 @@ export default function SignUpForm() {
         password
       );
       setUser(registerUser.user);
-      toast.success("会員登録に成功しました。", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-      })
+      showToast("success", "会員登録に成功しました。");
+
       router.push("/Main");
     } catch (error) {
-      toast.error("会員登録に失敗しました。", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-      })
+      showToast("error", "会員登録に失敗しました。");
     }
   };
 
@@ -53,18 +74,29 @@ export default function SignUpForm() {
         <h1>新規登録</h1>
         <input
           type="email"
+          id="email"
           placeholder="メールアドレス"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-96 p-2 mt-1 mb-7 border-b-2 border-[#2e9287] focus:outline-none focus:border-teal-500"
         />
-        <input
-          type="password"
-          placeholder="パスワード"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-96 p-2 mt-1 mb-7 border-b-2 border-[#2e9287] focus:outline-none focus:border-teal-500"
-        />
+        <div className="relative mb-7">
+          <input
+            type={showPassword ? "text" : "password"}
+            id="password"
+            placeholder="パスワード"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-96 p-2 mt-1 border-b-2 border-[#2e9287] focus:outline-none focus:border-teal-500 pr-12"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute top-1/2 right-20 transform -translate-y-1/2 text-teal-500"
+          >
+            {showPassword ? <Visibility /> : <VisibilityOff />}
+          </button>
+        </div>
         <button
           onClick={handleRegister}
           type="submit"
