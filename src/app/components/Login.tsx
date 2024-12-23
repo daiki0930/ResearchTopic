@@ -13,6 +13,7 @@ import { showToast } from "@/utils/toast";
 import "react-toastify/dist/ReactToastify.css"
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { FirebaseError } from "firebase/app";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -61,8 +62,8 @@ export default function Login() {
       setUser(loginUser.user);
       showToast("success", "ログインに成功しました。");
       router.push("/Main");
+      
     } catch (error) {
-      setUser(null);
       showToast("error", "ログインに失敗しました。");
     }
   };
@@ -73,6 +74,7 @@ export default function Login() {
         <h1>ログイン</h1>
         <input
           type="email"
+          id="email"
           placeholder="メールアドレス"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
