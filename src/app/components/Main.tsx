@@ -10,37 +10,6 @@ import "react-toastify/dist/ReactToastify.css"
 
 // import Description from '../../../components/description';
 
-// import { destroyCookie, setCookie } from 'nookies';
-// import { parseCookies } from 'nookies';
-// import { auth } from '../../api/firebase/firebaseAdmin';
-
-// export async function getServerSideProps(context) {
-//     const cookies = parseCookies(context);
-
-//     if (!cookies.session) {
-//         return {
-//             redirect: {
-//                 destination: '/Research/FirebaseLogin',
-//                 permanent: false
-//             },
-//         };
-//     }
-
-//     try {
-//         const decodedToken = await admin.auth().verifySessionCookie(cookies.session, true);
-//         return {
-//             props: { user: decodedToken },
-//           };
-//     } catch (error) {
-//           return {
-//             redirect: {
-//               destination: '/Research/FirebaseLogin',
-//               permanent: false,
-//             },
-//         };
-//     }
-// }
-
 export default function Main() {
     const [user, setUser] = useState<User | null>(null);
     const router = useRouter();
@@ -54,14 +23,14 @@ export default function Main() {
     const [content, setContent] = useState();
 
     const fetchTheme = async () => {
-        console.log('-------どこまで届いているか------')
+        console.log('-------GPTのAPI------')
         const requestBody = {
             interests,
             ...(interests === '理科' ? {interests1} : {interests3} ),
             ...(interests === '理科' ? {interests2} : {}),
             interests4,
         };
-        console.log('-------どこまで届いているか1------')
+        console.log('-------GPTのAPI1------')
         const response = await fetch('../api', {
             method: 'POST',
             headers: {
@@ -69,9 +38,9 @@ export default function Main() {
             },
             body: JSON.stringify(requestBody),
         });
-        console.log('-------どこまで届いているか2------')
+        console.log('-------GPTのAPI2------')
         const data = await response.json();
-        console.log('-------どこまで届いているか3------')
+        console.log('-------GPTのAPI3------')
         setTheme(data.theme);
         setContent(data.content);
     };
@@ -94,6 +63,8 @@ export default function Main() {
         try {
             await signOut(auth);
 
+            const res = await fetch('../api/sessionLogout', { method: 'DELETE' });
+
             setUser(null);
             showToast("success", "ログアウトに成功しました。");
             router.push('/');
@@ -101,6 +72,27 @@ export default function Main() {
             showToast("error", "ログアウトに失敗しました。");
         }
     }
+
+    const checkSessionCookie = () => {
+        const cookies = document.cookie;
+        const sessionCookie = cookies
+         .split(';')
+         .find((row) => row.startsWith('gpt-login-session='));
+
+         if (sessionCookie) {
+            console.log('セッションCookieが設定されています:', sessionCookie);
+          } else {
+            console.log('セッションCookieが設定されていません');
+          }
+
+         if (!sessionCookie) {
+            window.location.href = '/';
+         }
+    };
+
+    useEffect(() => {
+        checkSessionCookie();
+    }, []);
 
     // const handleReset = () => {
     //     setInterests('');
@@ -119,17 +111,17 @@ export default function Main() {
                     AIと一緒に自由研究テーマを決めよう!
                 </p>
             </div>
-            <div className="absolute top-5 right-[30px]">
-            <button onClick={handleLogout} className='bg-[#f4f0b4] px-5 py-2.5 border-none rounded-md'> ログアウト </button>
-            </div>
 
-            <div className="mb-5 absolute bottom-[110px] w-full text-center bg-[#f3960b]">
-                <p className="text-2xl text-black">
-                    いくつかの質問に答えてね！
-                </p>
+            <div className="absolute top-5 right-[30px]">
+                <button onClick={handleLogout} className='bg-[#f4f0b4] px-5 py-2.5 border-none rounded-md'> ログアウト </button>
             </div>
 
             <div className="flex flex-col justify-center items-center text-[25px] h-screen">
+
+                <p className="w-3/4 text-center bg-[#f3960b]">
+                    いくつかの質問に答えてね！
+                </p>
+
                 <p className="mt-[90px]">
                     小学校の授業で好きな科目は？(１科目のみ)
                 </p>
@@ -189,14 +181,15 @@ export default function Main() {
                 >
                     自由研究テーマを作成
                 </button>
-
-                <p className="mt-[19px]"> 提案テーマ </p>
+            
+                <p className="mt-[19px] mb-5"> 提案テーマ </p>
                 
-                { theme && <p className="max-w-[90%] p-[25px] rounded-[15px] mb-5 text-[23px] bg-[#f09050]"> {theme} </p> }
+                { theme && (<p className="max-w-[90%] p-[25px] mx-auto rounded-[15px] mb-5 text-[23px] bg-[#f09050]"> {theme} </p> )}
                 
-                { content && <p className="max-w-[90%] p-[25px] rounded-[15px] text-[23px] bg-[#f09050]"> {content} </p> }
+                { content && (<p className="max-w-[90%] p-[25px] mx-auto rounded-[15px] text-[23px] bg-[#f09050]"> {content} </p> )}
 
                 {/* <button onClicK={handleReset} className={styles.ResetButton}> もう一度行う</button> */}
+
             </div>
         </div>
     );

@@ -10,13 +10,13 @@ const openai = new OpenAI({
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        console.log('------届いているか------', body);
+        console.log('------GPTのAPIルート------', body);
 
         const { interests, interests1, interests2, interests3, interests4 } = body;
 
         const userMessage = interests === '理科'
-        ? `小学生向けの${ interests }の自由研究テーマを提案してください。回答は「テーマ」と「研究内容」を教えてください。「研究内容」はその実験の説明を簡単にしてください。次の三つをヒントに。面白かった実験: ${interests1}。使用可能な材料: ${interests2}。期間: ${interests4}。`
-        : `小学生向けの${ interests }の自由研究テーマを提案してください。回答は「テーマ」と「研究内容」を教えてください。「研究内容」はその実験の説明を簡単にしてください。次の三つをヒントに。気になること: ${interests3}。 期間: ${interests4}。`
+        ? `小学生向けの${ interests }の自由研究テーマを提案してください。回答は「テーマ」と「研究内容」を教えてください。「研究内容」はその実験の説明を130字で簡単にしてください。次の三つをヒントに。面白かった実験: ${interests1}。使用可能な材料: ${interests2}。期間: ${interests4}。`
+        : `小学生向けの${ interests }の自由研究テーマを提案してください。回答は「テーマ」と「研究内容」を教えてください。「研究内容」はその実験の説明を130字で簡単にしてください。次の三つをヒントに。気になること: ${interests3}。 期間: ${interests4}。`
 
         const completion = await openai.chat.completions.create({
             model: 'gpt-3.5-turbo',
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
                 // { role: 'user', content: `Suggest a research theme for an elementary school student. Subjects: ${interests}. An interesting experiment: ${interests1}. Duration: ${interests2}. Available materials: ${interests3}`}
             ]
         });
-        console.log('------届いているか1--------', completion);
+        console.log('------GPTのAPIルート1--------', completion);
 
         const messageContent = completion && completion?.choices && Array.isArray(completion.choices) && completion.choices.length > 0 && completion.choices[0].message && completion.choices[0].message.content !== null
 
@@ -42,13 +42,13 @@ export async function POST(req: Request) {
         if (completion && completion?.choices && Array.isArray(completion.choices) && completion.choices.length > 0 && completion.choices[0].message && completion.choices[0].message.content !== null) {
 
             const responseText = completion.choices[0].message.content.trim();
-            console.log('------届いているか2-------', responseText)
+            console.log('------GPTのAPIルート2-------', responseText)
             
             Theme = responseText.split('\n')[0];
-            console.log('------届いているか3-------', Theme)
+            console.log('------GPTのAPIルート3-------', Theme)
             
             Content = responseText.split('\n')[1];
-            console.log('------届いているか4-------', Content)
+            console.log('------GPTのAPIルート4-------', Content)
         }
         return NextResponse.json({ theme: Theme, content: Content });
     } catch (error) {

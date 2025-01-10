@@ -60,9 +60,26 @@ export default function Login() {
         password
       );
       setUser(loginUser.user);
+      console.log('----------ログイン成功--------', loginUser)
+
+      // idトークンを基にセッション管理
+      const idToken = await loginUser.user.getIdToken();
+      console.log('----これはidトークン------', idToken);
+
+      const response = await fetch('../api/sessionLogin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ idToken })
+      });
+      console.log('-------セッションのAPI1------')
+
+      const data = await response.json();
+  
       showToast("success", "ログインに成功しました。");
       router.push("/Main");
-      
+
     } catch (error) {
       showToast("error", "ログインに失敗しました。");
     }
