@@ -3,16 +3,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import "../Authentication/Login/firebase/firebase";
+import { auth } from "../Authentication/Login/firebase/firebase";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   UserCredential,
   User,
 } from "firebase/auth";
 import { showToast } from "@/utils/toast";
-import "react-toastify/dist/ReactToastify.css"
+import "react-toastify/dist/ReactToastify.css";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-
 
 export default function SignUpForm() {
   const [email, setEmail] = useState("");
@@ -20,7 +19,6 @@ export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
-  const auth = getAuth();
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -28,9 +26,10 @@ export default function SignUpForm() {
   };
 
   const validatePassword = (password: string): boolean => {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return passwordRegex.test(password);
-  }
+  };
 
   const handleRegister = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -49,7 +48,10 @@ export default function SignUpForm() {
       return;
     }
     if (!validatePassword(password)) {
-      showToast("error", "パスワードは最低8文字以上で、大文字、小文字、数字、記号を含む必要があります。");
+      showToast(
+        "error",
+        "パスワードは最低8文字以上で、大文字、小文字、数字、記号を含む必要があります。"
+      );
       return;
     }
 

@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import "../Authentication/Login/firebase/firebase";
+import { auth } from "../Authentication/Login/firebase/firebase";
 import {
-  getAuth,
   signInWithEmailAndPassword,
   UserCredential,
   User,
 } from "firebase/auth";
 import { showToast } from "@/utils/toast";
-import "react-toastify/dist/ReactToastify.css"
+import "react-toastify/dist/ReactToastify.css";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { FirebaseError } from "firebase/app";
@@ -21,7 +21,6 @@ export default function Login() {
   const [user, setUser] = useState<User | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-  const auth = getAuth();
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -30,8 +29,7 @@ export default function Login() {
 
   const validatePassword = (password: string): boolean => {
     return password.length >= 8;
-  }
-
+  };
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -60,26 +58,25 @@ export default function Login() {
         password
       );
       setUser(loginUser.user);
-      console.log('----------ログイン成功--------', loginUser)
+      console.log("----------ログイン成功--------", loginUser);
 
       // idトークンを基にセッション管理
       const idToken = await loginUser.user.getIdToken();
-      console.log('----これはidトークン------', idToken);
+      console.log("----これはidトークン------", idToken);
 
-      const response = await fetch('../api/sessionLogin', {
-        method: 'POST',
+      const response = await fetch("../api/sessionLogin", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ idToken })
+        body: JSON.stringify({ idToken }),
       });
-      console.log('-------セッションのAPI1------')
+      console.log("-------セッションのAPI1------");
 
       const data = await response.json();
-  
+
       showToast("success", "ログインに成功しました。");
       router.push("/Main");
-
     } catch (error) {
       showToast("error", "ログインに失敗しました。");
     }
@@ -119,7 +116,6 @@ export default function Login() {
           onClick={handleLogin}
           type="submit"
           className="bg-teal-500 hover:bg-[#b31d40] active:bg-[#ba832b] text-white w-1/2 p-2 rounded-md cursor-pointer mb-2"
-        
         >
           ログイン
         </button>
