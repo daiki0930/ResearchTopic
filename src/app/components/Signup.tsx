@@ -110,21 +110,3 @@ export default function SignUpForm() {
     </div>
   );
 }
-
-// export async function getServerSideProps(context) {
-//     const auth = getAuth();
-//     const user = auth.currentUser;
-
-//     if (!user) {
-//         return {
-//             redirect: {
-//                 destination: '/Research',
-//                 permanent: false
-//             },
-//         };
-//     }
-
-//     return {
-//         props: { user },
-//     };
-// }
