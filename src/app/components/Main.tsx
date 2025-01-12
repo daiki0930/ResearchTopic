@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
 import "../Authentication/Login/firebase/firebase";
 import { auth } from "../Authentication/Login/firebase/firebase";
 import {  
@@ -12,8 +11,6 @@ import {
 } from "firebase/auth";
 import { showToast } from "@/utils/toast";
 import "react-toastify/dist/ReactToastify.css";
-
-// import Description from '../../../components/description';
 
 export default function Main() {
   const [user, setUser] = useState<User | null>(null);
@@ -48,17 +45,31 @@ export default function Main() {
     setTheme(data.theme);
     setContent(data.content);
   };
+//   const checkSessionCookie = () => {
+//     const cookies = document.cookie;
+//     const sessionCookie = cookies
+//       .split(";")
+//       .find((row) => row.startsWith("gpt-login-session="));
+//     console.log('---------チェッククッキー--------', sessionCookie)
 
-  useEffect(() => {
-    const Logout = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        setUser(null);
-      }
-    });
-    return () => Logout();
-  }, [auth]);
+//     if (sessionCookie) {
+//       console.log("セッションCookieが設定されています:", sessionCookie);
+//     } else {
+//       console.log("セッションCookieが設定されていません");
+//     }
+
+//     if (!sessionCookie) {
+//       window.location.href = "/";
+//     }
+//   };
+
+//   useEffect(() => {
+//     const timer = setTimeout(() => {
+//         checkSessionCookie();
+//     }, 2000);
+//   }, []);
+
+
 
   const handleLogout = async () => {
     try {
@@ -74,26 +85,16 @@ export default function Main() {
     }
   };
 
-//   const checkSessionCookie = () => {
-//     const cookies = document.cookie;
-//     const sessionCookie = cookies
-//       .split(";")
-//       .find((row) => row.startsWith("gpt-login-session="));
-
-//     if (sessionCookie) {
-//       console.log("セッションCookieが設定されています:", sessionCookie);
-//     } else {
-//       console.log("セッションCookieが設定されていません");
-//     }
-
-//     if (!sessionCookie) {
-//       window.location.href = "/";
-//     }
-//   };
-
-//   useEffect(() => {
-//     checkSessionCookie();
-//   }, []);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        router.push('../Authentication/Login');
+      }
+    });
+    return () => unsubscribe();
+  }, [auth, router]);
 
   // const handleReset = () => {
   //     setInterests('');

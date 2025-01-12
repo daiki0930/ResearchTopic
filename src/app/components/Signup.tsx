@@ -62,8 +62,22 @@ export default function SignUpForm() {
         password
       );
       setUser(registerUser.user);
-      showToast("success", "会員登録に成功しました。");
 
+      // idトークンを基にセッション管理
+      const idToken = await registerUser.user.getIdToken();
+      console.log("----これはidトークン------", idToken);
+
+      const response = await fetch("../api/sessionLogin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ idToken }),
+      });
+      console.log("-------セッションのAPI1------");
+      const data = await response.json();
+
+      showToast("success", "会員登録に成功しました。");
       router.push("/Main");
     } catch (error) {
       showToast("error", "会員登録に失敗しました。");

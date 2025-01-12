@@ -11,9 +11,7 @@ import {
 } from "firebase/auth";
 import { showToast } from "@/utils/toast";
 import "react-toastify/dist/ReactToastify.css";
-
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { FirebaseError } from "firebase/app";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -72,7 +70,6 @@ export default function Login() {
         body: JSON.stringify({ idToken }),
       });
       console.log("-------セッションのAPI1------");
-
       const data = await response.json();
 
       showToast("success", "ログインに成功しました。");
