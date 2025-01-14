@@ -23,6 +23,9 @@ export default function Main() {
   const [theme, setTheme] = useState();
   const [content, setContent] = useState();
 
+  const validSubjects = ["国語", "算数", "理科", "社会", "音楽"];
+  const isValidSubjects = validSubjects.includes(interests);
+
   const fetchTheme = async () => {
     console.log("-------GPTのAPI------");
     const requestBody = {
@@ -97,10 +100,6 @@ export default function Main() {
     return () => unsubscribe();
   }, [auth, router]);
 
-  const validSubjects = ["国語", "算数", "理科", "社会", "音楽"];
-
-  const isValidSubjects = validSubjects.includes(interests);
-
 //   if (!user) {
 //     return <div>Loading...</div>; // ローディング中の画面
 //   }
@@ -130,7 +129,6 @@ export default function Main() {
 
         <p className="mt-[90px]">小学校の授業で好きな科目は？(１科目のみ)</p>
         <input
-          type="text"
           value={interests}
           onChange={(e) => setInterests(e.target.value)}
           placeholder="例: 理科、国語"
@@ -139,20 +137,12 @@ export default function Main() {
 
         <p>理科の授業で面白かった実験は？(理科と答えた場合のみ)</p>
         <input
-          type="text"
           value={interests1}
           onChange={(e) => setInterests1(e.target.value)}
-        //   disabled={["国語", "算数", "社会", "音楽"].includes(interests)}
           disabled={ !isValidSubjects || interests !== "理科"}
-        //   placeholder={
-        //     ["国語", "算数", "社会", "音楽"].includes(interests)
-        //       ? "※入力できません"
-        //       : "例: 水の性質、燃焼、光の反射と屈折、バネと力、昆虫の観察、天気の観察"
-        //   }
           placeholder={
             !isValidSubjects || interests !== "理科"
-            //   ? "※入力できません"
-              ? "※好きな科目を入力してください。"
+              ? "※科目を入力してください。"
               : "例: 水の性質、燃焼、光の反射と屈折、バネと力、昆虫の観察、天気の観察"
           }
           className="w-[710px] p-[9px] mt-[5px] mb-[80px] text-[20px] border-t-2 border-b-2 border-[#f56f27] outline-none placeholder-opacity-60 placeholder:text-center"
@@ -162,18 +152,11 @@ export default function Main() {
         <input
           value={interests2}
           onChange={(e) => setInterests2(e.target.value)}
-        //   disabled={["国語", "算数", "社会", "音楽"].includes(interests)}
           disabled={ !isValidSubjects || interests !== "理科"}
-        //   placeholder={
-        //     ["国語", "算数", "社会", "音楽"].includes(interests)
-        //       ? "※入力できません"
-        //       : "例: 水、酢、砂糖、電池、ペットボトル、磁石、アルミホイル、空き瓶"
-        //   }
           placeholder={
             !isValidSubjects || interests !== "理科"
-            //   ? "※入力できません"
-              ? "※好きな科目を入力してください。"
-              : "例: 水の性質、燃焼、光の反射と屈折、バネと力、昆虫の観察、天気の観察"
+              ? "※科目を入力してください。"
+              : "例: 水、酢、砂糖、電池、ペットボトル、磁石、アルミホイル、空き瓶"
           }
           className="w-[660px] p-[9px] mt-[5px] mb-[80px] text-[20px] border-t-2 border-b-2 border-[#f56f27] outline-none placeholder-opacity-60 placeholder:text-center"
         />
@@ -184,17 +167,10 @@ export default function Main() {
         <input
           value={interests3}
           onChange={(e) => setInterests3(e.target.value)}
-        //   disabled={interests === "理科"}
           disabled={ !isValidSubjects || interests == "理科"}
-        //   placeholder={
-        //     interests === "理科"
-        //       ? "※入力できません"
-        //       : "例: 漢字や詩に関すること(国語)、図形やデータのこと(算数)、地理や歴史のこと(社会)"
-        //   }
           placeholder={
             !isValidSubjects || interests == "理科"
-            //   ? "※入力できません"
-              ? "※好きな科目を入力してください。"
+              ? "※科目を入力してください。"
               : "例: 漢字や詩に関すること(国語)、図形やデータのこと(算数)、地理や歴史のこと(社会)"
           }
           className="w-[870px] p-[9px] mt-[5px] mb-[80px] text-[20px] border-t-2 border-b-2 border-[#f56f27] outline-none placeholder-opacity-60 placeholder:text-center"
@@ -204,8 +180,13 @@ export default function Main() {
         <input
           value={interests4}
           onChange={(e) => setInterests4(e.target.value)}
-          placeholder="例: 一週間、一ヶ月"
-          className="w-[200px] p-[9px] mt-[5px] mb-[80px] text-[20px] border-t-2 border-b-2 border-[#f56f27] outline-none placeholder-opacity-60 placeholder:text-center"
+          disabled={ !isValidSubjects }
+          placeholder={
+            !isValidSubjects
+            ? "※科目を入力してください。"
+            : "例: 一週間、一ヶ月"
+          }
+          className="w-[300px] p-[9px] mt-[5px] mb-[80px] text-[20px] border-t-2 border-b-2 border-[#f56f27] outline-none placeholder-opacity-60 placeholder:text-center"
         />
 
         <button
