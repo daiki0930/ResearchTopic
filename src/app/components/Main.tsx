@@ -45,6 +45,7 @@ export default function Main() {
     setTheme(data.theme);
     setContent(data.content);
   };
+
 //   const checkSessionCookie = () => {
 //     const cookies = document.cookie;
 //     const sessionCookie = cookies
@@ -96,15 +97,9 @@ export default function Main() {
     return () => unsubscribe();
   }, [auth, router]);
 
-  // const handleReset = () => {
-  //     setInterests('');
-  //     setInterests1('');
-  //     setInterests2('');
-  //     setInterests3('');
-  //     setInterests4('');
-  //     setTheme('');
-  //     setContent('');
-  // };
+//   if (!user) {
+//     return <div>Loading...</div>; // ローディング中の画面
+//   }
 
   return (
     <div className="flex justify-center items-center h-[2300px] flex-col bg-gradient-to-b from-[#f5ba61] to-[#eecfb6]">
@@ -208,8 +203,6 @@ export default function Main() {
             {content}{" "}
           </p>
         )}
-
-        {/* <button onClicK={handleReset} className={styles.ResetButton}> もう一度行う</button> */}
       </div>
     </div>
   );
