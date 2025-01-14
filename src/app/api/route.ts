@@ -15,8 +15,8 @@ export async function POST(req: Request) {
         const { interests, interests1, interests2, interests3, interests4 } = body;
 
         const userMessage = interests === '理科'
-        ? `小学生向けの${ interests }の自由研究テーマを提案してください。回答は「テーマ」と「研究内容」を教えてください。「研究内容」はその実験の説明を130字で簡単にしてください。次の三つをヒントに。面白かった実験: ${interests1}。使用可能な材料: ${interests2}。期間: ${interests4}。`
-        : `小学生向けの${ interests }の自由研究テーマを提案してください。回答は「テーマ」と「研究内容」を教えてください。「研究内容」はその実験の説明を130字で簡単にしてください。次の三つをヒントに。気になること: ${interests3}。 期間: ${interests4}。`
+        ? `小学生向けの${ interests }の自由研究テーマを提案してください。回答は「テーマ」と「研究内容」を教えてください。「研究内容」はその実験の説明を180字で簡単にしてください。次の三つをヒントに。面白かった実験: ${interests1}。使用可能な材料: ${interests2}。期間: ${interests4}。`
+        : `小学生向けの${ interests }の自由研究テーマを提案してください。回答は「テーマ」と「研究内容」を教えてください。「研究内容」はその実験の説明を180字で簡単にしてください。次の三つをヒントに。気になること: ${interests3}。 期間: ${interests4}。`
 
         const completion = await openai.chat.completions.create({
             model: 'gpt-3.5-turbo',
