@@ -6,8 +6,7 @@ import "../Authentication/Login/firebase/firebase";
 import { auth } from "../Authentication/Login/firebase/firebase";
 import {
   signInWithEmailAndPassword,
-  UserCredential,
-  User,
+  UserCredential
 } from "firebase/auth";
 import { showToast } from "@/utils/toast";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,7 +15,6 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState<User | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
@@ -55,12 +53,11 @@ export default function Login() {
         email,
         password
       );
-      setUser(loginUser.user);
-      console.log("----------ログイン成功--------", loginUser);
+      // console.log("----------ログイン成功--------", loginUser);
 
       // idトークンを基にセッション管理
       const idToken = await loginUser.user.getIdToken();
-      console.log("----これはidトークン------", idToken);
+      // console.log("----これはidトークン------", idToken);
 
       const response = await fetch("../api/sessionLogin", {
         method: "POST",
@@ -69,8 +66,9 @@ export default function Login() {
         },
         body: JSON.stringify({ idToken }),
       });
-      console.log("-------セッションのAPI1------");
-      const data = await response.json();
+      // console.log("-------セッションのAPI1------");
+      await response.json();
+      // const data = await response.json();
 
       showToast("success", "ログインに成功しました。");
       router.push("/Main");

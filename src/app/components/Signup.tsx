@@ -6,8 +6,7 @@ import "../Authentication/Login/firebase/firebase";
 import { auth } from "../Authentication/Login/firebase/firebase";
 import {
   createUserWithEmailAndPassword,
-  UserCredential,
-  User,
+  UserCredential
 } from "firebase/auth";
 import { showToast } from "@/utils/toast";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,7 +16,6 @@ export default function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
   const validateEmail = (email: string): boolean => {
@@ -61,11 +59,10 @@ export default function SignUpForm() {
         email,
         password
       );
-      setUser(registerUser.user);
 
       // idトークンを基にセッション管理
       const idToken = await registerUser.user.getIdToken();
-      console.log("----これはidトークン------", idToken);
+      // console.log("----これはidトークン------", idToken);
 
       const response = await fetch("../api/sessionLogin", {
         method: "POST",
@@ -74,8 +71,9 @@ export default function SignUpForm() {
         },
         body: JSON.stringify({ idToken }),
       });
-      console.log("-------セッションのAPI1------");
-      const data = await response.json();
+      // console.log("-------セッションのAPI1------");
+      await response.json();
+      // const data = await response.json();
 
       showToast("success", "会員登録に成功しました。");
       router.push("/Main");

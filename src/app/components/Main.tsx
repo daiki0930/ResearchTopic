@@ -6,14 +6,12 @@ import "../Authentication/Login/firebase/firebase";
 import { auth } from "../Authentication/Login/firebase/firebase";
 import {  
     signOut,
-    onAuthStateChanged,
-    User
+    onAuthStateChanged
 } from "firebase/auth";
 import { showToast } from "@/utils/toast";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Main() {
-  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
   const [interests, setInterests] = useState<string>("");
   const [interests1, setInterests1] = useState<string>("");
@@ -49,39 +47,10 @@ export default function Main() {
     setContent(data.content);
   };
 
-//   const checkSessionCookie = () => {
-//     const cookies = document.cookie;
-//     const sessionCookie = cookies
-//       .split(";")
-//       .find((row) => row.startsWith("gpt-login-session="));
-//     console.log('---------チェッククッキー--------', sessionCookie)
-
-//     if (sessionCookie) {
-//       console.log("セッションCookieが設定されています:", sessionCookie);
-//     } else {
-//       console.log("セッションCookieが設定されていません");
-//     }
-
-//     if (!sessionCookie) {
-//       window.location.href = "/";
-//     }
-//   };
-
-//   useEffect(() => {
-//     const timer = setTimeout(() => {
-//         checkSessionCookie();
-//     }, 2000);
-//   }, []);
-
-
-
   const handleLogout = async () => {
     try {
       await signOut(auth);
-
-      const res = await fetch("../api/sessionLogout", { method: "DELETE" });
-
-      setUser(null);
+      await fetch("../api/sessionLogout", { method: "DELETE" });
       showToast("success", "ログアウトに成功しました。");
       router.push("/");
     } catch (error) {
@@ -92,17 +61,13 @@ export default function Main() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        setUser(currentUser);
+        return; // 認証済みの場合はなにも処理しない
       } else {
         router.push('../Authentication/Login');
       }
     });
     return () => unsubscribe();
   }, [auth, router]);
-
-//   if (!user) {
-//     return <div>Loading...</div>; // ローディング中の画面
-//   }
 
   return (
     <div className="flex justify-center items-center h-[2300px] flex-col bg-gradient-to-b from-[#f5ba61] to-[#eecfb6]">
