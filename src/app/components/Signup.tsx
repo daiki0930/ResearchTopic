@@ -4,10 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import "../Authentication/Login/firebase/firebase";
 import { auth } from "../Authentication/Login/firebase/firebase";
-import {
-  createUserWithEmailAndPassword,
-  UserCredential
-} from "firebase/auth";
+import { createUserWithEmailAndPassword, UserCredential } from "firebase/auth";
 import { showToast } from "@/utils/toast";
 import "react-toastify/dist/ReactToastify.css";
 import { Visibility, VisibilityOff } from "@mui/icons-material";

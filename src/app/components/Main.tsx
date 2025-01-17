@@ -4,10 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import "../Authentication/Login/firebase/firebase";
 import { auth } from "../Authentication/Login/firebase/firebase";
-import {  
-    signOut,
-    onAuthStateChanged
-} from "firebase/auth";
+import { signOut, onAuthStateChanged } from "firebase/auth";
 import { showToast } from "@/utils/toast";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -63,11 +60,27 @@ export default function Main() {
       if (currentUser) {
         return; // 認証済みの場合はなにも処理しない
       } else {
-        router.push('../Authentication/Login');
+        router.push("../Authentication/Login");
       }
     });
     return () => unsubscribe();
   }, [auth, router]);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const res = await fetch("../api/checkSession", {
+        method: "GET",
+
+      });
+      console.log('----セッションCookie-----', res);
+      const data = await res.json();
+      console.log('----セッションCookie1-----', data.authenticated);
+      if (!data.authenticated) {
+        router.push("../Authentication/Login");
+      }
+    };
+    checkSession();
+  }, []);
 
   return (
     <div className="flex justify-center items-center h-[2300px] flex-col bg-gradient-to-b from-[#f5ba61] to-[#eecfb6]">
@@ -104,7 +117,7 @@ export default function Main() {
         <input
           value={interests1}
           onChange={(e) => setInterests1(e.target.value)}
-          disabled={ !isValidSubjects || interests !== "理科"}
+          disabled={!isValidSubjects || interests !== "理科"}
           placeholder={
             !isValidSubjects || interests !== "理科"
               ? "※科目を入力してください。"
@@ -117,7 +130,7 @@ export default function Main() {
         <input
           value={interests2}
           onChange={(e) => setInterests2(e.target.value)}
-          disabled={ !isValidSubjects || interests !== "理科"}
+          disabled={!isValidSubjects || interests !== "理科"}
           placeholder={
             !isValidSubjects || interests !== "理科"
               ? "※科目を入力してください。"
@@ -132,7 +145,7 @@ export default function Main() {
         <input
           value={interests3}
           onChange={(e) => setInterests3(e.target.value)}
-          disabled={ !isValidSubjects || interests == "理科"}
+          disabled={!isValidSubjects || interests == "理科"}
           placeholder={
             !isValidSubjects || interests == "理科"
               ? "※科目を入力してください。"
@@ -145,11 +158,11 @@ export default function Main() {
         <input
           value={interests4}
           onChange={(e) => setInterests4(e.target.value)}
-          disabled={ !isValidSubjects }
+          disabled={!isValidSubjects}
           placeholder={
             !isValidSubjects
-            ? "※科目を入力してください。"
-            : "例: 一週間、一ヶ月"
+              ? "※科目を入力してください。"
+              : "例: 一週間、一ヶ月"
           }
           className="w-[300px] p-[9px] mt-[5px] mb-[80px] text-[20px] border-t-2 border-b-2 border-[#f56f27] outline-none placeholder-opacity-60 placeholder:text-center"
         />
