@@ -21,15 +21,19 @@ export default function Main() {
   const validSubjects = ["国語", "算数", "理科", "社会", "音楽"];
   const isValidSubjects = validSubjects.includes(interests);
 
+  const handleReload = () => {
+    window.location.reload();
+  };
+
   const fetchTheme = async () => {
-    console.log("-------GPTのAPI------");
+    // console.log("-------GPTのAPI------");
     const requestBody = {
       interests,
       ...(interests === "理科" ? { interests1 } : { interests3 }),
       ...(interests === "理科" ? { interests2 } : {}),
       interests4,
     };
-    console.log("-------GPTのAPI1------");
+    // console.log("-------GPTのAPI1------");
     const response = await fetch("../api", {
       method: "POST",
       headers: {
@@ -37,9 +41,9 @@ export default function Main() {
       },
       body: JSON.stringify(requestBody),
     });
-    console.log("-------GPTのAPI2------");
+    // console.log("-------GPTのAPI2------");
     const data = await response.json();
-    console.log("-------GPTのAPI3------");
+    // console.log("-------GPTのAPI3------");
     setTheme(data.theme);
     setContent(data.content);
   };
@@ -55,26 +59,27 @@ export default function Main() {
     }
   };
 
+  
+  // 認証状態を管理
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        return; // 認証済みの場合はなにも処理しない
-      } else {
+      if (!currentUser) {
         router.push("../Authentication/Login");
       }
     });
     return () => unsubscribe();
   }, [auth, router]);
 
+  // セッション状態を管理
   useEffect(() => {
     const checkSession = async () => {
       const res = await fetch("../api/checkSession", {
         method: "GET",
 
       });
-      console.log('----セッションCookie-----', res);
+    //   console.log('----セッションCookie-----', res);
       const data = await res.json();
-      console.log('----セッションCookie1-----', data.authenticated);
+    //   console.log('----セッションCookie1-----', data.authenticated);
       if (!data.authenticated) {
         router.push("../Authentication/Login");
       }
@@ -189,6 +194,8 @@ export default function Main() {
             {content}{" "}
           </p>
         )}
+
+        <button onClick={handleReload}>もう一度行う</button>
       </div>
     </div>
   );
