@@ -1,15 +1,22 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import "../Authentication/Login/firebase/firebase";
-import { auth } from "../Authentication/Login/firebase/firebase";
-import { signOut, onAuthStateChanged } from "firebase/auth";
-import { showToast } from "@/utils/toast";
+import Logout from "./Logout";
 import "react-toastify/dist/ReactToastify.css";
 
+type FormValues = {
+  interests: string;
+  interests1?: string;
+  interests2?: string;
+  interests3?: string;
+  interests4: string;
+};
+
 export default function Main() {
-  const router = useRouter();
+  // const router = useRouter();
+
   const [interests, setInterests] = useState<string>("");
   const [interests1, setInterests1] = useState<string>("");
   const [interests2, setInterests2] = useState<string>("");
@@ -20,10 +27,6 @@ export default function Main() {
 
   const validSubjects = ["国語", "算数", "理科", "社会", "音楽"];
   const isValidSubjects = validSubjects.includes(interests);
-
-  const handleReload = () => {
-    window.location.reload();
-  };
 
   const fetchTheme = async () => {
     // console.log("-------GPTのAPI------");
@@ -48,45 +51,6 @@ export default function Main() {
     setContent(data.content);
   };
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      await fetch("../api/sessionLogout", { method: "DELETE" });
-      showToast("success", "ログアウトに成功しました。");
-      router.push("/");
-    } catch (error) {
-      showToast("error", "ログアウトに失敗しました。");
-    }
-  };
-
-  
-  // 認証状態を管理
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (!currentUser) {
-        router.push("../Authentication/Login");
-      }
-    });
-    return () => unsubscribe();
-  }, [auth, router]);
-
-  // セッション状態を管理
-  useEffect(() => {
-    const checkSession = async () => {
-      const res = await fetch("../api/checkSession", {
-        method: "GET",
-
-      });
-    //   console.log('----セッションCookie-----', res);
-      const data = await res.json();
-    //   console.log('----セッションCookie1-----', data.authenticated);
-      if (!data.authenticated) {
-        router.push("../Authentication/Login");
-      }
-    };
-    checkSession();
-  }, []);
-
   return (
     <div className="flex justify-center items-center h-[2300px] flex-col bg-gradient-to-b from-[#f5ba61] to-[#eecfb6]">
       <div className="absolute top-5 w-3/4 text-center bg-white rounded-[10px]">
@@ -94,17 +58,7 @@ export default function Main() {
           AIと一緒に自由研究テーマを決めよう!
         </p>
       </div>
-
-      <div className="absolute top-5 right-[30px]">
-        <button
-          onClick={handleLogout}
-          className="bg-[#f4f0b4] px-5 py-2.5 border-none rounded-md"
-        >
-          {" "}
-          ログアウト{" "}
-        </button>
-      </div>
-
+      <Logout />
       <div className="flex flex-col justify-center items-center text-[25px] h-screen">
         <p className="w-3/4 text-center bg-[#f3960b]">
           いくつかの質問に答えてね！
@@ -194,8 +148,6 @@ export default function Main() {
             {content}{" "}
           </p>
         )}
-
-        <button onClick={handleReload}>もう一度行う</button>
       </div>
     </div>
   );

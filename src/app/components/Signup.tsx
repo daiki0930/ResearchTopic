@@ -75,6 +75,7 @@ export default function SignUpForm() {
       showToast("success", "会員登録に成功しました。");
       router.push("/Main");
     } catch (error) {
+      console.error("会員登録エラー", error);
       showToast("error", "会員登録に失敗しました。");
     }
   };

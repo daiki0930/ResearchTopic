@@ -70,6 +70,7 @@ export default function Login() {
       showToast("success", "ログインに成功しました。");
       router.push("/Main");
     } catch (error) {
+      console.error("ログインエラー", error);
       showToast("error", "ログインに失敗しました。");
     }
   };
