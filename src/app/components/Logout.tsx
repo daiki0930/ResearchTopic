@@ -38,9 +38,8 @@ export default function Logout () {
             const res = await fetch("../api/checkSession", {
                 method: "GET",
             });
-            //   console.log('----セッションCookie-----', res);
+            
             const data = await res.json();
-            //   console.log('----セッションCookie1-----', data.authenticated);
             if (!data.authenticated) {
                 router.push("../Authentication/Login");
             }
