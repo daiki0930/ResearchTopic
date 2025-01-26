@@ -1,4 +1,4 @@
-import { MainSearchForm } from "../components/Main"
+import { MainSearchForm } from "@/app/components/Main";
 
 export default function MainPage() {
     return <MainSearchForm />
