@@ -13,6 +13,6 @@ npm install
 
 アプリケーションの起動
 
-- ターミナルで起動する場合、`npm run dev` を実行する。
+ターミナルで起動する場合、`npm run dev` を実行する。
 
 http://localhost:3000
