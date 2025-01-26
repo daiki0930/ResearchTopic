@@ -54,8 +54,7 @@ export default function Logout () {
             onClick={handleLogout}
             className="bg-[#f4f0b4] px-5 py-2.5 border-none rounded-md"
             >
-                {" "}
-                ログアウト{" "}
+                ログアウト
             </button>
         </div>
     )
