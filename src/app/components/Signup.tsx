@@ -59,8 +59,7 @@ export default function SignUpForm() {
 
       // idトークンを基にセッション管理
       const idToken = await registerUser.user.getIdToken();
-      // console.log("----これはidトークン------", idToken);
-
+    
       const response = await fetch("../api/sessionLogin", {
         method: "POST",
         headers: {
@@ -68,10 +67,8 @@ export default function SignUpForm() {
         },
         body: JSON.stringify({ idToken }),
       });
-      // console.log("-------セッションのAPI1------");
       await response.json();
-      // const data = await response.json();
-
+      
       showToast("success", "会員登録に成功しました。");
       router.push("/Main");
     } catch (error) {
@@ -82,7 +79,7 @@ export default function SignUpForm() {
 
   return (
     <div className="flex justify-center items-center h-[900px] bg-gradient-to-b from-[#47d5e2] to-[#c1f8ea]">
-      <div className="bg-white p-5 rounded-lg shadow-md max-w-xl w-full text-center">
+      <form className="bg-white p-5 rounded-lg shadow-md max-w-xl w-full text-center">
         <h1>新規登録</h1>
         <input
           type="email"
@@ -116,7 +113,7 @@ export default function SignUpForm() {
         >
           新規登録
         </button>
-      </div>
+      </form>
     </div>
   );
 }

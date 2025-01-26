@@ -5,19 +5,13 @@ const openai = new OpenAI({
     apiKey: process.env.OPEN_AI_API_KEY,
 });
 
-// const openai = new OpenAIApi(configuration);
-
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        console.log('------GPTのAPIルート------', body);
-
         const { interests, interests1, interests2, interests3, interests4 } = body;
-
         const userMessage = interests === '理科'
-        // ? `小学生向けの${ interests }の自由研究テーマを提案してください。回答は「テーマ」と「研究内容」に分けてください。「研究内容」はその実験の説明を絶対に200字にまとめてください。次の三つをヒントにしてね。面白かった実験: ${interests1}。使用可能な材料: ${interests2}。期間: ${interests4}。`
         ? `小学生向けの${ interests }の自由研究テーマを提案してください。回答は「テーマ」と「研究内容」を教えてください。「研究内容」はその実験の内容を120文字で簡単にしてください。次の三つをヒントに。面白かった実験: ${interests1}。使用可能な材料: ${interests2}。期間: ${interests4}。`
-        : `小学生向けの${ interests }の自由研究テーマを提案してください。回答は「テーマ」と「研究内容」を教えてください。「研究内容」はその実験の説明を180文字で簡単にしてください。次の三つをヒントに。気になること: ${interests3}。 期間: ${interests4}。`
+        : `小学生向けの${ interests }の自由研究テーマを提案してください。回答は「テーマ」と「研究内容」を教えてください。「研究内容」はその実験の説明を120文字で簡単にしてください。次の三つをヒントに。気になること: ${interests3}。 期間: ${interests4}。`
 
         const completion = await openai.chat.completions.create({
             model: 'gpt-3.5-turbo',
@@ -27,10 +21,8 @@ export async function POST(req: Request) {
             messages: [
                 { role: "system", content: "You are an assistant who helps elementary school students create independent research themes. Please respond in Japanese."},
                 { role: 'user', content: userMessage }
-                // { role: 'user', content: `Suggest a research theme for an elementary school student. Subjects: ${interests}. An interesting experiment: ${interests1}. Duration: ${interests2}. Available materials: ${interests3}`}
             ]
         });
-        console.log('------GPTのAPIルート1--------', completion);
 
         const messageContent = completion && completion?.choices && Array.isArray(completion.choices) && completion.choices.length > 0 && completion.choices[0].message && completion.choices[0].message.content !== null
 
@@ -41,16 +33,12 @@ export async function POST(req: Request) {
 
         let Theme;
         let Content;
-        if (completion && completion?.choices && Array.isArray(completion.choices) && completion.choices.length > 0 && completion.choices[0].message && completion.choices[0].message.content !== null) {
 
+        // Responseデータがあり、中身があることを確認した上で、ThemeとContentに該当データを割り当てる。
+        if (completion && completion?.choices && Array.isArray(completion.choices) && completion.choices.length > 0 && completion.choices[0].message && completion.choices[0].message.content !== null) {
             const responseText = completion.choices[0].message.content.trim();
-            console.log('------GPTのAPIルート2-------', responseText)
-            
             Theme = responseText.split('\n')[0];
-            console.log('------GPTのAPIルート3-------', Theme)
-            
             Content = responseText.split('\n')[1];
-            console.log('------GPTのAPIルート4-------', Content)
         }
         return NextResponse.json({ theme: Theme, content: Content });
     } catch (error) {
