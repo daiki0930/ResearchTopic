@@ -36,8 +36,9 @@ npm install
 npm run dev
 ```
 WebアプリケーションのURL:
+```bash
 http://localhost:3000
-
+```
 
 今後の展望:
 - 小学生全学年が使えるように精度向上する。
